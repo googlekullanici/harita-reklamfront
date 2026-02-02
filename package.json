@@ -1,7 +1,6 @@
 {
   "name": "ad-map-frontend",
   "version": "1.0.0",
-  "homepage": "https://googlekullanici.github.io/haritamfiyat",
   "license": "MIT",
   "private": true,
   "dependencies": {
