@@ -66,6 +66,16 @@ function MapPage() {
   const [markerPos, setMarkerPos] = useState([41.015137, 28.97953]);
   const [texts, setTexts] = useState(["", "", ""]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     fetchData();
@@ -126,34 +136,40 @@ function MapPage() {
   }
 
   return (
-    <div style={{ display: "flex", height: "100vh", background: "#f0f4f8" }}>
+    <div style={{ 
+      display: "flex", 
+      flexDirection: isMobile ? "column" : "row",
+      height: "100vh", 
+      background: "#f0f4f8" 
+    }}>
       
-      {/* SOL PANEL - PROFESYONEl TASARIM */}
+      {/* SOL PANEL - RESPONSIVE */}
       <div
         style={{
-          width: 420,
+          width: isMobile ? "100%" : 420,
+          maxHeight: isMobile ? "50vh" : "100vh",
           background: "linear-gradient(180deg, #ffffff 0%, #f9fafb 100%)",
-          padding: 32,
-          boxShadow: "4px 0 24px rgba(0,0,0,0.08)",
+          padding: isMobile ? 16 : 32,
+          boxShadow: isMobile ? "0 4px 24px rgba(0,0,0,0.08)" : "4px 0 24px rgba(0,0,0,0.08)",
           display: "flex",
           flexDirection: "column",
           position: "relative",
           overflow: "auto"
         }}
       >
-        {/* ÜST BAŞLIK VE DÜZENLE BUTONU */}
+        {/* ÜST BAŞLIK */}
         <div style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: 24,
-          paddingBottom: 16,
+          marginBottom: isMobile ? 16 : 24,
+          paddingBottom: isMobile ? 12 : 16,
           borderBottom: "2px solid #e5e7eb"
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{
-              width: 48,
-              height: 48,
+              width: isMobile ? 40 : 48,
+              height: isMobile ? 40 : 48,
               background: "linear-gradient(135deg, #4285f4 0%, #34a853 100%)",
               borderRadius: 12,
               display: "flex",
@@ -161,7 +177,7 @@ function MapPage() {
               justifyContent: "center",
               boxShadow: "0 4px 12px rgba(66, 133, 244, 0.3)"
             }}>
-              <svg width="28" height="28" viewBox="0 0 48 48" fill="none">
+              <svg width={isMobile ? "24" : "28"} height={isMobile ? "24" : "28"} viewBox="0 0 48 48" fill="none">
                 <path d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" fill="#fff"/>
                 <path d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" fill="#fff"/>
               </svg>
@@ -169,7 +185,7 @@ function MapPage() {
             <div>
               <h1 style={{
                 margin: 0,
-                fontSize: 20,
+                fontSize: isMobile ? 16 : 20,
                 fontWeight: 700,
                 color: "#1f2937",
                 letterSpacing: "-0.5px"
@@ -178,7 +194,7 @@ function MapPage() {
               </h1>
               <p style={{
                 margin: 0,
-                fontSize: 12,
+                fontSize: isMobile ? 10 : 12,
                 color: "#6b7280",
                 fontWeight: 500
               }}>
@@ -186,44 +202,44 @@ function MapPage() {
               </p>
             </div>
           </div>
-          
-         
         </div>
 
         {/* GÖRSEL KARTI */}
-        <div style={{ 
-          position: "relative",
-          marginBottom: 28,
-          borderRadius: 16,
-          overflow: "hidden",
-          boxShadow: "0 8px 24px rgba(0,0,0,0.12)"
-        }}>
-          <img
-            src={image}
-            alt="reklam görseli"
-            style={{
-              width: "100%",
-              display: "block",
+        {!isMobile && (
+          <div style={{ 
+            position: "relative",
+            marginBottom: 28,
+            borderRadius: 16,
+            overflow: "hidden",
+            boxShadow: "0 8px 24px rgba(0,0,0,0.12)"
+          }}>
+            <img
+              src={image}
+              alt="reklam görseli"
+              style={{
+                width: "100%",
+                display: "block",
+                borderRadius: 16
+              }}
+            />
+            <div style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.1) 100%)",
               borderRadius: 16
-            }}
-          />
-          <div style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.1) 100%)",
-            borderRadius: 16
-          }} />
-        </div>
+            }} />
+          </div>
+        )}
 
-        {/* BİLGİ KARTI - MODERN TASARIM */}
+        {/* BİLGİ KARTI */}
         <div
           style={{
             background: "#ffffff",
-            borderRadius: 16,
-            padding: 28,
+            borderRadius: isMobile ? 12 : 16,
+            padding: isMobile ? 16 : 28,
             flexGrow: 1,
             boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
             border: "1px solid #e5e7eb"
@@ -236,12 +252,12 @@ function MapPage() {
             gap: 6,
             background: "linear-gradient(135deg, #4285f4 0%, #34a853 100%)",
             color: "white",
-            padding: "6px 14px",
+            padding: isMobile ? "4px 10px" : "6px 14px",
             borderRadius: 20,
-            fontSize: 11,
+            fontSize: isMobile ? 10 : 11,
             fontWeight: 700,
             letterSpacing: 0.5,
-            marginBottom: 16,
+            marginBottom: isMobile ? 12 : 16,
             boxShadow: "0 2px 8px rgba(66, 133, 244, 0.25)"
           }}>
             📍 İşletme Konumu
@@ -250,8 +266,8 @@ function MapPage() {
           {/* BAŞLIK */}
           {texts[0] ? (
             <h2 style={{ 
-              margin: "0 0 16px 0", 
-              fontSize: 26, 
+              margin: "0 0 12px 0", 
+              fontSize: isMobile ? 18 : 26, 
               fontWeight: 700, 
               color: "#111827",
               lineHeight: 1.3,
@@ -261,34 +277,33 @@ function MapPage() {
             </h2>
           ) : (
             <div style={{
-              height: 32,
+              height: isMobile ? 24 : 32,
               background: "#f3f4f6",
               borderRadius: 8,
-              marginBottom: 16,
-              animation: "pulse 1.5s infinite"
+              marginBottom: 12
             }} />
           )}
 
           {/* AÇIKLAMA */}
           {texts[1] ? (
             <p style={{ 
-              margin: "0 0 24px 0", 
+              margin: "0 0 16px 0", 
               color: "#4b5563", 
-              lineHeight: 1.7,
-              fontSize: 15
+              lineHeight: 1.6,
+              fontSize: isMobile ? 13 : 15
             }}>
               {texts[1]}
             </p>
           ) : (
             <div>
               <div style={{
-                height: 16,
+                height: 14,
                 background: "#f3f4f6",
                 borderRadius: 6,
-                marginBottom: 8
+                marginBottom: 6
               }} />
               <div style={{
-                height: 16,
+                height: 14,
                 background: "#f3f4f6",
                 borderRadius: 6,
                 width: "80%"
@@ -300,53 +315,57 @@ function MapPage() {
           {texts[2] && (
             <div style={{
               background: "linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)",
-              borderRadius: 14,
-              padding: 20,
-              marginTop: 24,
+              borderRadius: isMobile ? 10 : 14,
+              padding: isMobile ? 12 : 20,
+              marginTop: isMobile ? 12 : 24,
               border: "2px solid #86efac"
             }}>
               <div style={{
-                fontSize: 11,
+                fontSize: isMobile ? 9 : 11,
                 letterSpacing: 1,
                 color: "#166534",
                 fontWeight: 700,
-                marginBottom: 8
+                marginBottom: 6
               }}>
                 ÖDEME TUTARI
               </div>
               <div style={{
-                fontSize: 32,
+                fontSize: isMobile ? 24 : 32,
                 fontWeight: 800,
                 color: "#15803d",
                 letterSpacing: "-1px"
               }}>
                 {texts[2]}
               </div>
-              
             </div>
-            
           )}
+          
           <p style={{
-                fontSize: 11, }}>Kalan Kullanım 2 Gün</p>
+            fontSize: isMobile ? 9 : 11,
+            marginTop: 8,
+            color: "#6b7280"
+          }}>
+            Kalan Kullanım 2 Gün
+          </p>
         </div>
 
         {/* ALT BİLGİ */}
         <div
           style={{
             textAlign: "center",
-            marginTop: 24,
-            padding: "16px 0",
-            fontSize: 12,
+            marginTop: isMobile ? 12 : 24,
+            padding: isMobile ? "8px 0" : "16px 0",
+            fontSize: isMobile ? 10 : 12,
             color: "#9ca3af",
             borderTop: "1px solid #e5e7eb",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            gap: 8
+            gap: 6
           }}
         >
-          <span style={{ fontSize: 16 }}>📍</span>
-          <span>Google Hizmet </span>
+          <span style={{ fontSize: isMobile ? 14 : 16 }}>📍</span>
+          <span>Google Hizmet</span>
         </div>
       </div>
 
@@ -354,7 +373,10 @@ function MapPage() {
       <MapContainer 
         center={markerPos} 
         zoom={13} 
-        style={{ flex: 1 }}
+        style={{ 
+          flex: 1,
+          height: isMobile ? "50vh" : "100vh"
+        }}
         scrollWheelZoom={true}
       >
         <TileLayer 
